@@ -12,13 +12,13 @@ $ npm install -g wae-cli
 
 ## Usage
 
-You can write a code using the Web Audio API via `context`.
+You can write a code using the Web Audio API via `audioContext`.
 
 ```js
 // coin.js
 
-const osc = context.createOscillator();
-const amp = context.createGain();
+const osc = audioContext.createOscillator();
+const amp = audioContext.createGain();
 
 osc.type = "square";
 osc.frequency.setValueAtTime(987.7666, 0);
@@ -26,11 +26,14 @@ osc.frequency.setValueAtTime(1318.5102, 0.075);
 osc.start(0);
 osc.stop(2);
 osc.connect(amp);
+osc.onended = () => {
+  process.exit();
+};
 
 amp.gain.setValueAtTime(0.25, 0);
 amp.gain.setValueAtTime(0.25, 0.075);
 amp.gain.linearRampToValueAtTime(0, 2);
-amp.connect(context.destination);
+amp.connect(audioContext.destination);
 ```
 
 simplest playback (using [`node-speaker`](https://github.com/TooTallNate/node-speaker))
@@ -80,20 +83,19 @@ AUDIO FILE FORMAT: s16 s32 u8 raw cd
 ```js
 const fs = require("fs");
 
-module.exports = (context) => {
+module.exports = (audioContext) => {
   const buffer = fs.readFileSync("coin.wav");
 
-  return context.decodeAudioData(buffer).then((audioBuffer) => {
-    const bufSrc = context.createBufferSource();
+  return audioContext.decodeAudioData(buffer).then((audioBuffer) => {
+    const bufSrc = audioContext.createBufferSource();
 
     bufSrc.buffer = audioBuffer;
     bufSrc.start(0);
 
-    bufSrc.connect(context.destination);
+    bufSrc.connect(audioContext.destination);
   });
 };
 ```
-
 
 ## License
 MIT
