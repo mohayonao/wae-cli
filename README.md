@@ -16,7 +16,6 @@ You can write a code using the Web Audio API via `audioContext`.
 
 ```js
 // coin.js
-
 const osc = audioContext.createOscillator();
 const amp = audioContext.createGain();
 
@@ -39,25 +38,25 @@ amp.connect(audioContext.destination);
 simplest playback (using [`node-speaker`](https://github.com/TooTallNate/node-speaker))
 
 ```sh
-$ wae coin.js
+$ wae coin
 ```
 
 playback using [ALSA](http://alsa.opensrc.org/Aplay) `aplay` via `stdout`
 
 ```sh
-$ wae coin.js -o stdout | aplay -f cd
+$ wae coin -o stdout | aplay -f cd
 ```
 
 playback using [SoX](http://sox.sourceforge.net/) `play` via `stdout`
 
 ```sh
-$ wae coin.js -o stdout | play -t s16 -r 44100 -c 2 -
+$ wae coin -o stdout | play -t s16 -r 44100 -c 2 -
 ```
 
 render to an audio file
 
 ```sh
-$ wae coin.js -o coin.wav
+$ wae coin -o coin.wav
 ```
 
 other options
@@ -78,7 +77,32 @@ wae [option] script-name [args]
 AUDIO FILE FORMAT: s16 s32 u8 raw cd
 ```
 
+#### provide arguments
+You can provide arguments from command line using node module style function. The arguments are parsed as JSON.
+
+```js
+// beep.js
+module.exports = (audioContext, frequency, duration) => {
+  const osc = audioContext.createOscillator();
+  const amp = audioContext.createGain();
+
+  osc.frequency.value = frequency;
+  osc.start(0);
+  osc.stop(duration);
+  osc.connect(amp);
+
+  amp.gain.setValueAtTime(0.5, 0);
+  amp.gain.linearRampToValueAtTime(0, duration);
+  amp.connect(audioContext.destination);
+};
+```
+
+```sh
+$ wae beep -- 1760 0.5
+```
+
 #### asynchronous code
+You can run asynchronous code using `Promise`.
 
 ```js
 const fs = require("fs");
