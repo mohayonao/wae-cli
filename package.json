@@ -12,7 +12,7 @@
   "dependencies": {
     "optionator": "^0.8.1",
     "tickable-timer": "^1.0.0",
-    "web-audio-engine": "^0.7.5"
+    "web-audio-engine": "*"
   },
   "devDependencies": {},
   "files": [
