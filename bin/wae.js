@@ -1,3 +1,5 @@
 #!/usr/bin/env node
 
-require("../lib/cli").run();
+const wae = require("web-audio-engine");
+
+require("../lib/cli").run(wae, process.argv);
