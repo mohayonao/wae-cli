@@ -1,7 +1,7 @@
 {
   "name": "wae-cli",
   "description": "web-audio-engine command line",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "author": "Nao Yonamine <mohayonao@gmail.com>",
   "bin": {
     "wae": "./bin/wae.js"
